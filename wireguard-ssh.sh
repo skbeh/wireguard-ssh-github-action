@@ -31,11 +31,11 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install wireguard-dkms net-tool
 # Generate GitHub side wireguard configuration
 cat > github.conf <<EOT
 [Interface]
-PrivateKey = ${github-privatekey}
+PrivateKey = ${cliect_privatekey}
 Address = ${GITHUB_IP}
 
 [Peer]
-PublicKey = ${peer-publickey}
+PublicKey = ${peer_publickey}
 Endpoint = ${PEER_IP}:${PEER_PORT}
 AllowedIPs = ${NETWORK}/30
 PersistentKeepalive = 20
@@ -60,9 +60,9 @@ echo "
 
 [Interface]
 ListenPort = ${PEER_PORT}
-PrivateKey = $(cat peer-privatekey)
+PrivateKey = $(cat peer_privatekey)
 [Peer]
-PublicKey = $(cat github-publickey)
+PublicKey = $(cat cliect_publickey)
 AllowedIPs = ${GITHUB_IP}/32
 "
 
