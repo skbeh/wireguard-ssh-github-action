@@ -9,13 +9,13 @@ if ! ssh-keygen -l -f - <<< "${SSH_PUBLIC_KEY}"; then
 fi
 
 # Calculate peer IPs
-GITHUB_IP=${GITHUB_IP:-192.168.192.1}
-PEER_PRIVATE_IP=$(awk -F\. '{print $1"."$2"."$3"."$4+1}' <<< "${GITHUB_IP}")
-NETWORK=$(awk -F\. '{print $1"."$2"."$3"."$4-1}' <<< "${GITHUB_IP}")
+CLIECT_IP=${CLIECT_IP:-192.168.192.1}
+PEER_PRIVATE_IP=$(awk -F\. '{print $1"."$2"."$3"."$4+1}' <<< "${CLIECT_IP}")
+NETWORK=$(awk -F\. '{print $1"."$2"."$3"."$4-1}' <<< "${CLIECT_IP}")
 PEER_PORT=${PEER_PORT:-51820}
 
 # Validate provided GitHub IP
-if [[ ! ${GITHUB_IP} =~ ^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}0*(1?[0-9]{1,2}|2([‌​0-4][0-9]|5[0-5]))$ ]]; then
+if [[ ! ${CLIECT_IP} =~ ^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}0*(1?[0-9]{1,2}|2([‌​0-4][0-9]|5[0-5]))$ ]]; then
     echo "Failed to validate GitHub IP address, aborting."
     exit 1
 fi
@@ -32,7 +32,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -yqq install wireguard-dkms net-tool
 cat > github.conf <<EOT
 [Interface]
 PrivateKey = ${cliect_privatekey}
-Address = ${GITHUB_IP}
+Address = ${CLIECT_IP}
 
 [Peer]
 PublicKey = ${peer_publickey}
@@ -63,7 +63,7 @@ ListenPort = ${PEER_PORT}
 PrivateKey = ${cliect_privatekey}
 [Peer]
 PublicKey = ${peer_publickey}
-AllowedIPs = ${GITHUB_IP}/32
+AllowedIPs = ${CLIECT_IP}/32
 "
 
 # Announce availability and wait for connection
@@ -76,10 +76,10 @@ echo "=== Ready - waiting up to ${SSH_CONNECTION_TIMEOUT} seconds for SSH connec
 # is established at all then drop the session after SSH_CONNECTION_TIMEOUT
 
 while [ "${SSH_CONNECTION_TIMEOUT}" -gt 0 ] ; do
-  if netstat -nt |grep -q -E "${GITHUB_IP}:22\\W+${PEER_PRIVATE_IP}:[0-9]+\\W+ESTABLISHED" ; then
+  if netstat -nt |grep -q -E "${CLIECT_IP}:22\\W+${PEER_PRIVATE_IP}:[0-9]+\\W+ESTABLISHED" ; then
     echo "=== SSH connection detected - sleeping for ${SESSION_TIMEOUT} seconds or until SSH session ends ==="
     while [ "${SESSION_TIMEOUT}" -gt 0 ] ; do
-        if netstat -nt |grep -q -E "${GITHUB_IP}:22\\W+${PEER_PRIVATE_IP}:[0-9]+\\W+ESTABLISHED" ; then
+        if netstat -nt |grep -q -E "${CLIECT_IP}:22\\W+${PEER_PRIVATE_IP}:[0-9]+\\W+ESTABLISHED" ; then
             # Connection is still up
             SESSION_TIMEOUT=$((SESSION_TIMEOUT - 1))
             sleep 1
