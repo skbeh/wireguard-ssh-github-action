@@ -60,9 +60,9 @@ echo "
 
 [Interface]
 ListenPort = ${PEER_PORT}
-PrivateKey = $(cat peer_privatekey)
+PrivateKey = ${cliect_privatekey}
 [Peer]
-PublicKey = $(cat cliect_publickey)
+PublicKey = ${peer_publickey}
 AllowedIPs = ${GITHUB_IP}/32
 "
 
