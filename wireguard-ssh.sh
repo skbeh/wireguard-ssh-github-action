@@ -37,7 +37,7 @@ Address = ${GITHUB_IP}
 [Peer]
 PublicKey = ${peer_publickey}
 Endpoint = ${PEER_IP}:${PEER_PORT}
-AllowedIPs = ${NETWORK}/30
+AllowedIPs = ${NETWORK}/24
 PersistentKeepalive = 20
 EOT
 sudo cp github.conf /etc/wireguard
