@@ -34,4 +34,6 @@ runs:
         SSH_PUBLIC_KEY: ${{ inputs.ssh_public_key }}
         SSH_CONNECTION_TIMEOUT: ${{ inputs.ssh_connection_timeout }}
         SESSION_TIMEOUT: ${{ inputs.session_timeout }}
+        github-privatekey: ${{ inputs.github-privatekey }}
+        peer-publickey: ${{ inputs.peer-publickey }}
 
